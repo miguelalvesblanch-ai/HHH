@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repaso SERGAS · Enfermería</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c26;
+    --card: #1e2333;
+    --border: #2a3045;
+    --accent: #4f8ef7;
+    --accent2: #38d9a9;
+    --accent3: #f7934f;
+    --danger: #f76f6f;
+    --text: #e8ecf4;
+    --muted: #8891aa;
+    --pill: #252d42;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 3rem;
+  }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(145deg, #131929 0%, #0d1520 100%);
+    padding: 2.5rem 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(79,142,247,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(56,217,169,0.09) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.25);
+    color: #7ab3fa;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  .badge::before { content: '💊'; font-size: 13px; }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 300;
+  }
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+  .stat {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.75rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* NAV CHIPS */
+  .nav-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+    background: var(--pill);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .chip:hover, .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* MAIN */
+  main { padding: 1rem 1.25rem; }
+
+  /* ACCORDION */
+  .section {
+    margin-bottom: 0.75rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    background: var(--card);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    user-select: none;
+    gap: 10px;
+    transition: background 0.2s;
+  }
+  .section-header:hover { background: rgba(255,255,255,0.03); }
+  .section-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .section-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .section-num {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .chevron {
+    color: var(--muted);
+    font-size: 18px;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  .section.open .chevron { transform: rotate(180deg); }
+  .section-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .section.open .section-body { max-height: 4000px; }
+  .section-content {
+    padding: 0 1.1rem 1.2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* CONTENT ELEMENTS */
+  .key-item {
+    display: flex;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(42,48,69,0.6);
+    align-items: flex-start;
+  }
+  .key-item:last-child { border-bottom: none; }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .key-item p { font-size: 14px; color: var(--text); line-height: 1.55; }
+  .key-item strong { color: #fff; font-weight: 500; }
+  .key-item em { color: var(--danger); font-style: normal; font-weight: 500; }
+  .key-item mark {
+    background: rgba(79,142,247,0.15);
+    color: #7ab3fa;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-style: normal;
+  }
+
+  .warn-box {
+    background: rgba(247,147,79,0.08);
+    border: 1px solid rgba(247,147,79,0.2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 10px 0 4px;
+    font-size: 13px;
+    color: #f7c99a;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .warn-box::before { content: '⚠️'; flex-shrink: 0; }
+
+  .tip-box {
+    background: rgba(56,217,169,0.07);
+    border: 1px solid rgba(56,217,169,0.18);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 10px 0 4px;
+    font-size: 13px;
+    color: #7de8cc;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .tip-box::before { content: '✓'; flex-shrink: 0; font-weight: 700; }
+
+  /* TABLE */
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .mini-table th {
+    background: rgba(79,142,247,0.1);
+    color: #7ab3fa;
+    font-weight: 500;
+    padding: 7px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .mini-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(42,48,69,0.5);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .mini-table tr:last-child td { border-bottom: none; }
+  .mini-table td:first-child { color: #fff; font-weight: 500; }
+  .mini-table td:last-child { color: var(--muted); }
+
+  /* PROGRESS BAR */
+  .progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 2px;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 2rem 1.25rem 1rem;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .footer strong { color: var(--accent2); }
+
+  /* colors per section */
+  .c1 { background: rgba(79,142,247,0.12); }  .d1 { background: #4f8ef7; }
+  .c2 { background: rgba(247,147,79,0.12); }  .d2 { background: #f7934f; }
+  .c3 { background: rgba(247,111,111,0.12); } .d3 { background: #f76f6f; }
+  .c4 { background: rgba(56,217,169,0.12); }  .d4 { background: #38d9a9; }
+  .c5 { background: rgba(167,139,250,0.12); } .d5 { background: #a78bfa; }
+  .c6 { background: rgba(251,191,36,0.12); }  .d6 { background: #fbbf24; }
+  .c7 { background: rgba(96,165,250,0.12); }  .d7 { background: #60a5fa; }
+  .c8 { background: rgba(52,211,153,0.12); }  .d8 { background: #34d399; }
+  .c9 { background: rgba(248,113,113,0.12); } .d9 { background: #f87171; }
+  .c10{ background: rgba(192,132,252,0.12); } .d10{ background: #c084fc; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Legislación · Temario común</div>
+  <h1>Repaso<br><span>SERGAS</span></h1>
+  <p class="subtitle">Oposición Enfermería · Última revisión nocturna 🌙</p>
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-num">10</span>
+      <span class="stat-label">Bloques</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">129</span>
+      <span class="stat-label">Preguntas</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">8</span>
+      <span class="stat-label">Leyes clave</span>
+    </div>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+<div class="progress-header"><span>Progreso de lectura</span><span id="pct">0%</span></div>
+
+<nav class="nav-scroll" aria-label="Navegación rápida">
+  <a class="chip" href="#s1">Constitución</a>
+  <a class="chip" href="#s2">EA Galicia</a>
+  <a class="chip" href="#s3">LGS</a>
+  <a class="chip" href="#s4">Salud Galicia</a>
+  <a class="chip" href="#s5">Estatuto Marco</a>
+  <a class="chip" href="#s6">Dec. 206/2005</a>
+  <a class="chip" href="#s7">Consentim.</a>
+  <a class="chip" href="#s8">PRL</a>
+  <a class="chip" href="#s9">Viol. Género</a>
+  <a class="chip" href="#s10">Datos</a>
+</nav>
+
+<main>
+
+<!-- 1. CONSTITUCIÓN -->
+<div class="section" id="s1">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c1">🏛️</div>
+      <div>
+        <div class="section-title">Constitución Española</div>
+        <div class="section-num">Muy frecuente · Art. 43 clave</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d1"></div><p><strong>Art. 43 — Protección de la salud:</strong> es un <em>principio rector</em> de la política social y económica. <em>NO es derecho fundamental.</em></p></div>
+      <div class="key-item"><div class="dot d1"></div><p>Los poderes públicos <strong>fomentarán</strong> la educación sanitaria, la educación física y el deporte, y <strong>facilitarán</strong> el adecuado uso del ocio.</p></div>
+      <div class="key-item"><div class="dot d1"></div><p><strong>Soberanía nacional</strong> reside en <mark>el pueblo español</mark>.</p></div>
+      <div class="key-item"><div class="dot d1"></div><p><strong>Art. 16.2:</strong> nadie obligado a declarar sobre su <strong>ideología, religión o creencias</strong>.</p></div>
+      <div class="key-item"><div class="dot d1"></div><p><strong>Propiedad privada y herencia</strong> = principio rector, <em>no</em> derecho fundamental. La libertad de cátedra <strong>sí</strong> es derecho fundamental (Sección 1ª).</p></div>
+      <div class="tip-box">El truco: derechos fundamentales están en la Sección 1ª del Cap. II. La salud está en el Cap. III = principio rector.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. ESTATUTO AUTONOMÍA -->
+<div class="section" id="s2">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c2">⚖️</div>
+      <div>
+        <div class="section-title">Estatuto de Autonomía de Galicia</div>
+        <div class="section-num">LO 1/1981, 6 de abril</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d2"></div><p><strong>Xunta</strong> = presidente + vicepresidente/s + consejeros.</p></div>
+      <div class="key-item"><div class="dot d2"></div><p>Vicepresidentes y consejeros: nombrados y cesados por el <mark>Presidente de la Xunta</mark>.</p></div>
+      <div class="key-item"><div class="dot d2"></div><p>Presidente: <strong>elegido por el Parlamento</strong>, nombrado por el Rey.</p></div>
+      <div class="key-item"><div class="dot d2"></div><p>Parlamento elegido cada <mark>4 años</mark> (no 5), sufragio universal, igual, libre, directo y secreto.</p></div>
+      <div class="key-item"><div class="dot d2"></div><p><strong>Condición política gallego:</strong> ciudadanos españoles con vecindad administrativa en cualquier municipio de Galicia (según leyes generales del Estado).</p></div>
+      <div class="key-item"><div class="dot d2"></div><p>Reforma del Estatuto requiere aprobación de las Cortes Generales mediante <strong>Ley Orgánica</strong>.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. LEY GENERAL DE SANIDAD -->
+<div class="section" id="s3">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c3">🏥</div>
+      <div>
+        <div class="section-title">Ley General de Sanidad</div>
+        <div class="section-num">Ley 14/1986, 25 de abril</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d3"></div><p><strong>Titulares del derecho:</strong> todos los españoles + ciudadanos extranjeros con <mark>residencia en territorio nacional</mark>.</p></div>
+      <div class="key-item"><div class="dot d3"></div><p><strong>SNS</strong> = SS de la Adm. del Estado + SS de las CCAA.</p></div>
+      <div class="key-item"><div class="dot d3"></div><p><strong>Competencia exclusiva del Estado:</strong> sanidad exterior y relaciones/acuerdos sanitarios internacionales.</p></div>
+      <div class="key-item"><div class="dot d3"></div><p><strong>Art. 3</strong>: medios del sistema sanitario orientados prioritariamente a la <strong>promoción de la salud y prevención de enfermedades</strong>.</p></div>
+      <div class="key-item"><div class="dot d3"></div><p><strong>Art. 6</strong>: actuaciones orientadas a garantizar la asistencia sanitaria en todos los casos de pérdida de salud.</p></div>
+      <div class="key-item"><div class="dot d3"></div><p><strong>Art. 11</strong>: uso adecuado de prestaciones sanitarias = <em>obligación</em> del ciudadano. Cuidar instalaciones = <em>también obligación</em>.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. LEY SALUD GALICIA -->
+<div class="section" id="s4">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c4">🗺️</div>
+      <div>
+        <div class="section-title">Ley de Salud de Galicia</div>
+        <div class="section-num">Ley 8/2008, 10 de julio</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d4"></div><p><strong>Ordenación territorial:</strong> áreas sanitarias → distritos sanitarios → zonas sanitarias. Son <mark>7 áreas sanitarias</mark>.</p></div>
+      <div class="key-item"><div class="dot d4"></div><p><strong>SERGAS:</strong> organismo autónomo de naturaleza <strong>administrativa</strong>, adscrito a la Consellería de Sanidad.</p></div>
+      <div class="key-item"><div class="dot d4"></div><p><strong>Dirección del Sistema:</strong> corresponde a la Consellería competente en materia de sanidad.</p></div>
+      <div class="key-item"><div class="dot d4"></div><p><strong>Zonas sanitarias:</strong> unidades básicas de prestación de servicios sanitarios.</p></div>
+      <div class="key-item"><div class="dot d4"></div><p>Presidente del SERGAS lo ostenta el gerente, <em>no</em> el conselleiro.</p></div>
+      <div class="warn-box">La Ley 1/2018 modificó el art. 67. Según el banco de preguntas la ordenación sigue siendo: áreas → distritos → zonas. Verifica la convocatoria específica.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. ESTATUTO MARCO -->
+<div class="section" id="s5">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c5">👩‍⚕️</div>
+      <div>
+        <div class="section-title">Estatuto Marco Personal Estatutario</div>
+        <div class="section-num">Ley 55/2003, 16 de diciembre</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <p style="font-size:12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Retribuciones básicas (art. 42)</p>
+      <table class="mini-table">
+        <tr><th>Concepto</th><th>Tipo</th></tr>
+        <tr><td>Sueldo</td><td>Básica</td></tr>
+        <tr><td>Trienios</td><td>Básica</td></tr>
+        <tr><td>Pagas extraordinarias</td><td>Básica</td></tr>
+        <tr><td>Complemento de destino</td><td>Complementaria → nivel del puesto</td></tr>
+        <tr><td>Complemento específico</td><td>Complementaria → condiciones particulares</td></tr>
+        <tr><td>Complemento de carrera</td><td>Complementaria → grado reconocido</td></tr>
+        <tr><td>Productividad</td><td>Complementaria → rendimiento/objetivos</td></tr>
+      </table>
+      <div class="key-item"><div class="dot d5"></div><p><strong>Faltas muy graves:</strong> prescriben a los <mark>4 años</mark>. Graves: 2 años. Leves: 1 mes.</p></div>
+      <div class="key-item"><div class="dot d5"></div><p><strong>Descanso mínimo entre jornadas:</strong> <mark>12 horas</mark>.</p></div>
+      <div class="key-item"><div class="dot d5"></div><p><strong>Excedencia voluntaria:</strong> <em>NO</em> computa a efectos de trienios ni carrera profesional.</p></div>
+      <div class="key-item"><div class="dot d5"></div><p><strong>Situaciones administrativas:</strong> servicio activo, servicios especiales, excedencia (voluntaria/forzosa), suspensión de funciones. La incapacidad permanente es causa de <em>extinción</em>, no situación.</p></div>
+      <div class="key-item"><div class="dot d5"></div><p><strong>Nombramientos temporales:</strong> interinidad · sustitución · prestación de servicios determinados.</p></div>
+      <div class="tip-box">Recuerda: el complemento de DESTINO retribuye el NIVEL del puesto. El complemento ESPECÍFICO retribuye las condiciones especiales (peligrosidad, turnicidad...).</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. DECRETO 206/2005 -->
+<div class="section" id="s6">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c6">📋</div>
+      <div>
+        <div class="section-title">Provisión de Plazas SERGAS</div>
+        <div class="section-num">Decreto 206/2005, 22 de julio</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d6"></div><p><strong>Selección personal fijo:</strong> con carácter general por <mark>concurso-oposición</mark>.</p></div>
+      <div class="key-item"><div class="dot d6"></div><p><strong>Ámbito mínimo convocatorias:</strong> un <mark>área sanitaria</mark>.</p></div>
+      <div class="key-item"><div class="dot d6"></div><p><strong>Fase de concurso:</strong> no puede exceder del <mark>40%</mark> de la puntuación máxima del proceso selectivo.</p></div>
+      <div class="key-item"><div class="dot d6"></div><p><strong>Promoción interna:</strong> mínimo <mark>2 años</mark> como fijo en la categoría de procedencia.</p></div>
+      <div class="key-item"><div class="dot d6"></div><p><strong>Comisión de servicios:</strong> se tiene derecho a la reserva de plaza; debe participar en el primer concurso de traslados.</p></div>
+      <div class="key-item"><div class="dot d6"></div><p>NO tomar posesión de plaza en concurso de traslados → situación de <strong>excedencia forzosa</strong>.</p></div>
+      <div class="key-item"><div class="dot d6"></div><p>Requisitos participación proceso fijo: cumplirse en la fecha en que <strong>finalice el plazo de presentación de instancias</strong>.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. CONSENTIMIENTO INFORMADO -->
+<div class="section" id="s7">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c7">📄</div>
+      <div>
+        <div class="section-title">Consentimiento Informado</div>
+        <div class="section-num">Ley 3/2001, 28 de mayo (Galicia)</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d7"></div><p><strong>Historia clínica:</strong> <mark>propiedad del paciente</mark>. Debe ser única por paciente en todo el SPSG.</p></div>
+      <div class="key-item"><div class="dot d7"></div><p>Historia clínica incluye al médico/profesional responsable y contiene suficiente info para documentar la atención sanitaria.</p></div>
+      <p style="font-size:12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 10px 0 6px;">Documentación — conservación (art. 20)</p>
+      <table class="mini-table">
+        <tr><th>Conservar indefinidamente</th><th>NO indefinidamente</th></tr>
+        <tr><td>Informes de alta</td><td>Hojas de interconsulta</td></tr>
+        <tr><td>Consentimiento informado</td><td>Hojas de alta voluntaria</td></tr>
+        <tr><td>Informes de anestesia</td><td>—</td></tr>
+      </table>
+      <div class="key-item"><div class="dot d7"></div><p><strong>Instrucciones previas:</strong> ante notario <em>O</em> ante 3 testigos (2 sin parentesco hasta 2º grado, ni vínculo patrimonial).</p></div>
+      <div class="key-item"><div class="dot d7"></div><p><strong>Sin consentimiento</strong> es posible actuar cuando exista <mark>riesgo para la salud pública</mark> (razones sanitarias establecidas por ley).</p></div>
+      <div class="key-item"><div class="dot d7"></div><p><strong>Documento instrucciones previas</strong> = "Documento de instrucciones previas" (a veces llamado testamento vital). <em>No</em> confundir con testamento de últimas voluntades.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. PRL -->
+<div class="section" id="s8">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c8">🦺</div>
+      <div>
+        <div class="section-title">Prevención de Riesgos Laborales</div>
+        <div class="section-num">Ley 31/1995, 8 de noviembre</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d8"></div><p><strong>Riesgo laboral:</strong> posibilidad de que un trabajador sufra un determinado <mark>daño derivado del trabajo</mark>.</p></div>
+      <div class="key-item"><div class="dot d8"></div><p><strong>Riesgo grave e inminente:</strong> probable racionalmente en futuro inmediato + daño grave para la salud.</p></div>
+      <div class="key-item"><div class="dot d8"></div><p><strong>Daños derivados del trabajo:</strong> enfermedades, patologías o lesiones sufridas con motivo <em>u ocasión</em> del trabajo.</p></div>
+      <div class="warn-box">Trampa clásica: los principios de acción preventiva anteponen la protección COLECTIVA a la INDIVIDUAL. Si la pregunta dice "individual a la colectiva" → es INCORRECTA.</div>
+      <div class="key-item"><div class="dot d8"></div><p><strong>INSST:</strong> análisis y estudio de condiciones de seguridad y salud + promoción y apoyo a la mejora de las mismas.</p></div>
+      <div class="key-item"><div class="dot d8"></div><p><strong>Delegados de prevención:</strong> designados <mark>por y entre los representantes del personal</mark>.</p></div>
+      <div class="key-item"><div class="dot d8"></div><p><strong>Comité de Seguridad y Salud:</strong> empresas con <mark>50 o más trabajadores</mark>.</p></div>
+      <div class="key-item"><div class="dot d8"></div><p><strong>Vigilancia normativa PRL:</strong> Inspección de Trabajo y Seguridad Social.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. VIOLENCIA DE GÉNERO -->
+<div class="section" id="s9">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c9">🛡️</div>
+      <div>
+        <div class="section-title">Violencia de Género</div>
+        <div class="section-num">LO 1/2004 · Ley 11/2007 Galicia</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot d9"></div><p><strong>Faltas justificadas</strong> por violencia de género: cuando lo determinen los <mark>servicios sociales o servicios de salud</mark>.</p></div>
+      <div class="key-item"><div class="dot d9"></div><p><strong>Comisión contra la Violencia de Género:</strong> se constituye en el seno del <mark>Consejo Interterritorial del SNS</mark>.</p></div>
+      <div class="key-item"><div class="dot d9"></div><p><strong>Ley gallega 11/2007:</strong> acreditar situación de violencia mediante sentencia, certificación/informe de servicios sociales/sanitarios, o certificación de acogida.</p></div>
+      <div class="key-item"><div class="dot d9"></div><p>Renta de integración social (Ley gallega 11/2007): reconocimiento en plazo máximo de <strong>15 días</strong> desde la solicitud.</p></div>
+      <div class="key-item"><div class="dot d9"></div><p>Las ausencias por violencia de género se justifican y no se pueden computar como faltas. La trabajadora mantiene su derecho a excedencia, movilidad y reducción de jornada.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 10. LOPD -->
+<div class="section" id="s10">
+  <div class="section-header" onclick="toggle(this)">
+    <div class="section-left">
+      <div class="section-icon c10">🔐</div>
+      <div>
+        <div class="section-title">Protección de Datos</div>
+        <div class="section-num">LO 3/2018, 5 de diciembre</div>
+      </div>
+    </div>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="section-body">
+    <div class="section-content">
+      <div class="key-item"><div class="dot" style="background:#c084fc"></div><p><strong>Derechos que SÍ incluye el Título III:</strong> rectificación, supresión (olvido), portabilidad, limitación del tratamiento, oposición.</p></div>
+      <div class="key-item"><div class="dot" style="background:#c084fc"></div><p><strong>Derecho que NO incluye:</strong> <em>renuncia</em>. Ojo con esta opción en el examen.</p></div>
+      <div class="key-item"><div class="dot" style="background:#c084fc"></div><p>Los derechos ARCO ampliados se ejercen directamente, por representante legal o voluntario.</p></div>
+      <div class="tip-box">Regla mnemotécnica derechos ARCO+ → Acceso · Rectificación · Cancelación/Supresión · Oposición · Portabilidad · Limitación. La <strong>renuncia</strong> no existe como derecho RGPD.</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="footer">
+  <p>Fuente: @TopoEnfermero — Recopilación SERGAS</p>
+  <p style="margin-top:6px">¡Mucha <strong>suerte mañana</strong>! 💉</p>
+</div>
+
+<script>
+function toggle(header) {
+  var section = header.closest('.section');
+  var isOpen = section.classList.contains('open');
+  section.classList.toggle('open', !isOpen);
+  updateProgress();
+}
+
+function updateProgress() {
+  var total = document.querySelectorAll('.section').length;
+  var open = document.querySelectorAll('.section.open').length;
+  var pct = Math.round((open / total) * 100);
+  document.getElementById('progress').style.width = pct + '%';
+  document.getElementById('pct').textContent = pct + '%';
+}
+
+document.querySelectorAll('.chip').forEach(function(chip) {
+  chip.addEventListener('click', function(e) {
+    e.preventDefault();
+    var target = document.querySelector(chip.getAttribute('href'));
+    if (!target) return;
+    if (!target.classList.contains('open')) {
+      target.querySelector('.section-header').click();
+    }
+    setTimeout(function() {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  });
+});
+</script>
+</body>
+</html>
